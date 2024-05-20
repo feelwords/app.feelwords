@@ -7,11 +7,11 @@ export default class IndexStoryController {
     return inertia.render('story/index')
   }
 
-  async show({ inertia }: HttpContext) {
+  async show({}: HttpContext) {
     // todo: Get a story by id
   }
 
-  async destroy({ response }: HttpContext) {
+  async destroy({}: HttpContext) {
     // todo : Delete a story
   }
 }

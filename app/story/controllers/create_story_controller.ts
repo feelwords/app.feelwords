@@ -5,7 +5,7 @@ export default class CreateStoryController {
     return inertia.render('story/create')
   }
 
-  async handleAction({ request, response }: HttpContext) {
+  async handleAction({}: HttpContext) {
     // todo : Create a new story
   }
 }

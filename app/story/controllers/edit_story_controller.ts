@@ -5,7 +5,7 @@ export default class EditStoryController {
     return inertia.render('story/edit')
   }
 
-  async handleAction({ request, response }: HttpContext) {
+  async handleAction({}: HttpContext) {
     // todo : Update the story
   }
 }
