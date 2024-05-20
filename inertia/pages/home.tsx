@@ -1,13 +1,13 @@
 import { Head } from '@inertiajs/react'
-import { MainLayout } from '~/layout/main_layout'
+import { Header } from '~/components/commons/header'
 
 export default function Home() {
   return (
     <>
       <Head title="Accueil" />
-      <MainLayout>
-        <h1>hello world</h1>
-      </MainLayout>
+      <main className={'text-white'}>
+        <Header />
+      </main>
     </>
   )
 }
