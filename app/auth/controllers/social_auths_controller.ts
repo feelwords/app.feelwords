@@ -48,7 +48,7 @@ export default class SocialAuthsController {
      * If user exists, then login
      */
     if (authUser) {
-      auth.use('web').login(authUser)
+      await auth.use('web').login(authUser)
       return response.redirect().toRoute('home')
     }
 
@@ -58,7 +58,7 @@ export default class SocialAuthsController {
 
     const newUser = new User()
     newUser.email = user.email
-    newUser.fullName = user.name
+    newUser.full_name = user.name
     newUser.profile_picture = user.avatarUrl
     await newUser.save()
 
