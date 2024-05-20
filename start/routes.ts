@@ -8,11 +8,9 @@
 */
 
 import router from '@adonisjs/core/services/router'
+const LoginController = () => import('#controllers/login_controller')
 
-router.get('/', async ({ inertia }) => {
-  return inertia.render('home')
-})
+const HomeController = () => import('#controllers/home_controller')
 
-router.get('/search', async ({ inertia }) => {
-  return inertia.render('search')
-})
+router.get('/', [HomeController, 'show'])
+router.get('/login', [LoginController, 'show'])
