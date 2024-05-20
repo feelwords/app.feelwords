@@ -3,16 +3,23 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Head } from '@inertiajs/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import axios from 'axios'
 
 type Inputs = {
   email: string
-  fullname: string
+  full_name: string
   password: string
 }
 
 export default function Login() {
   const { register, handleSubmit } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    axios.post('/register', data).then((response) => {
+      if (response.status === 201) {
+        window.location.href = '/'
+      }
+    })
+  }
   return (
     <>
       <Head title="Création de compte" />
@@ -40,11 +47,11 @@ export default function Login() {
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="fullname">Nom complet</Label>
+                  <Label htmlFor="full_name">Nom complet</Label>
                 </div>
                 <Input
-                  {...register('fullname')}
-                  id="fullname"
+                  {...register('full_name')}
+                  id="full_name"
                   type="texte"
                   placeholder={'John Doe'}
                   className={'text-black'}

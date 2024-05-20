@@ -25,6 +25,6 @@ export default class LoginController {
     /**
      * Step 4: Send them to a protected route
      */
-    response.redirect('/')
+    return response.status(201).json(user)
   }
 }

@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { createUserValidator } from '#validators/create_user'
+import { createUserValidator } from '../validators/create_user.js'
 import User from '#models/user'
 
 export default class RegistersController {
@@ -18,6 +18,6 @@ export default class RegistersController {
     await auth.use('web').login(user)
 
     // Redirect to the home page
-    response.redirect('/')
+    return response.status(201).json(user)
   }
 }

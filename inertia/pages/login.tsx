@@ -3,6 +3,7 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Head } from '@inertiajs/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import axios from 'axios'
 
 type Inputs = {
   email: string
@@ -11,7 +12,13 @@ type Inputs = {
 
 export default function Login() {
   const { register, handleSubmit } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    axios.post('/login', data).then((response) => {
+      if (response.status === 201) {
+        window.location.href = '/'
+      }
+    })
+  }
   return (
     <>
       <Head title="Connexion à votre compte" />
