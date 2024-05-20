@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Ahsing';
+  src: local('Ahsing'), url(/assets/fonts/Ahsing-Regular.otf) format('woff');
+}
+
+.ahsing {
+  font-family: 'Ahsing', sans-serif;
+}
+
 body {
-  background-color: #222222;
+  background-color: #141414;
 }
 
 .active-icon {

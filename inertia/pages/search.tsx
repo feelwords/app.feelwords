@@ -1,13 +1,13 @@
 import { Head } from '@inertiajs/react'
-import { Main_layout } from '~/layout/main_layout'
+import { MainLayout } from '~/layout/main_layout'
 
 export default function Search() {
   return (
     <>
       <Head title="Recherche" />
-      <Main_layout>
+      <MainLayout>
         <h1>Search</h1>
-      </Main_layout>
+      </MainLayout>
     </>
   )
 }

@@ -1,13 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-
-export const Header = () => {
-  return (
-    <>
-      <HeaderMobile />
-      <HeaderDesktop />
-    </>
-  )
-}
+import { MenuCommand } from '~/components/commons/menu_command'
 
 const headerLinks = [
   {
@@ -192,6 +184,15 @@ const headerLinks = [
   },
 ]
 
+export const Header = () => {
+  return (
+    <>
+      <HeaderMobile />
+      <HeaderDesktop />
+    </>
+  )
+}
+
 function HeaderMobile() {
   const [activeLink, setActiveLink] = useState(window.location.pathname)
 
@@ -220,7 +221,20 @@ function HeaderMobile() {
 function HeaderDesktop() {
   return (
     <>
-      <header className={'md:block hidden'}></header>
+      <header className={'md:flex hidden'}>
+        <nav className={'w-full flex justify-between items-center backdrop-blur-sm p-4'}>
+          <div className={'flex items-center mr-8'}>
+            <img
+              src="/assets/images/feelwordslogo.png"
+              alt="logo"
+              className={'w-12 h-12 rounded-xl'}
+            />
+            <h1 className={'ahsing ml-3 text-2xl '}>Feelwords</h1>
+          </div>
+
+          <MenuCommand />
+        </nav>
+      </header>
     </>
   )
 }
