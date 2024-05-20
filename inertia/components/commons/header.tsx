@@ -3,8 +3,8 @@ import { MenuCommand } from '~/components/commons/menu_command'
 import { UserProfile } from '~/components/commons/user_profile'
 import Category from '#models/category'
 import axios from 'axios'
-import User from '#models/user'
 import { API_URL } from '../../../utils/axios'
+import User from '#models/user'
 
 const headerLinks = [
   {
@@ -182,12 +182,12 @@ export const Header = () => {
     <>
       <HeaderMobile
         user_id={currentUser.id}
-        fullName={currentUser.fullName}
+        full_name={currentUser.full_name}
         user_profile_picture_url={currentUser.profile_picture}
       />
       <HeaderDesktop
         user_id={currentUser.id}
-        fullName={currentUser.fullName}
+        full_name={currentUser.full_name}
         user_profile_picture_url={currentUser.profile_picture}
         categories={categories}
       />
@@ -196,11 +196,11 @@ export const Header = () => {
 }
 
 function HeaderMobile({
-  fullName,
+  full_name,
   user_profile_picture_url,
   user_id,
 }: {
-  fullName: string | null
+  full_name: string | null
   user_profile_picture_url: string | null
   user_id: number
 }) {
@@ -222,7 +222,7 @@ function HeaderMobile({
       <header className={'w-full flex md:hidden justify-between items-center backdrop-blur-sm p-4'}>
         <img src="/assets/images/feelwordslogo.png" alt="logo" className={'w-10 h-10 rounded-xl'} />
         <UserProfile
-          fullName={fullName}
+          full_name={full_name}
           user_profile_picture_url={user_profile_picture_url}
           user_id={user_id}
         />
@@ -237,12 +237,12 @@ function HeaderMobile({
 }
 
 function HeaderDesktop({
-  fullName,
+  full_name,
   user_profile_picture_url,
   user_id,
   categories,
 }: {
-  fullName: string | null
+  full_name: string | null
   user_profile_picture_url: string | null
   user_id: number
   categories: Category[]
@@ -264,7 +264,7 @@ function HeaderDesktop({
             <MenuCommand categories={categories} />
             <div className={'ml-3'}>
               <UserProfile
-                fullName={fullName}
+                full_name={full_name}
                 user_profile_picture_url={user_profile_picture_url}
                 user_id={user_id}
               />

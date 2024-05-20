@@ -18,6 +18,6 @@ export default class RegistersController {
     await auth.use('web').login(user)
 
     // Redirect to the home page
-    return response.status(201).json(user)
+    return response.redirect().toRoute('home')
   }
 }

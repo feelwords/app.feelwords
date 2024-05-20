@@ -39,6 +39,12 @@ function List() {
       published: true,
       createdAt: '2021-08-01T00:00:00Z',
       updatedAt: '2021-08-01T00:00:00Z',
+      categories: [
+        {
+          id: 1,
+          label: 'Vie',
+        },
+      ],
     },
   ]
   return <div></div>

@@ -10,6 +10,8 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
+const SocialAuthsController = () => import('../app/auth/controllers/social_auths_controller.js')
+
 const ApiCategoryController = () => import('../app/category/controllers/api_category_controller.js')
 
 const ApiUserController = () => import('../app/user/controllers/api_user_controller.js')
@@ -24,6 +26,10 @@ const RegistersController = () => import('../app/auth/controllers/register_contr
 const LoginController = () => import('../app/auth/controllers/login_controller.js')
 
 const HomeController = () => import('#controllers/home_controller')
+
+// Auth routes
+router.get('/auth/google', [SocialAuthsController, 'redirect']).as('auth.google')
+router.get('/auth/google/callback', [SocialAuthsController, 'callback']).as('auth.google.callback')
 
 // Login routes
 router.group(() => {
