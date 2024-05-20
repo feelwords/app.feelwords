@@ -47,14 +47,14 @@ router
 
     // Story routes
     router.get('/stories', [IndexStoryController, 'index']).as('stories.index')
-    router.get('/stories/:id', [IndexStoryController, 'show']).as('stories.show')
-    router.delete('/stories/:id', [IndexStoryController, 'destroy']).as('stories.destroy')
+    router.get('/story/:id', [IndexStoryController, 'show']).as('stories.show')
+    router.delete('/story/:id', [IndexStoryController, 'destroy']).as('stories.destroy')
     // Edit story routes
-    router.get('/stories/:id/edit', [EditStoryController, 'index']).as('stories.edit')
-    router.patch('/stories/:id', [EditStoryController, 'handleAction']).as('stories.update')
+    router.get('/story/:id/edit', [EditStoryController, 'index']).as('stories.edit')
+    router.patch('/story/:id', [EditStoryController, 'handleAction']).as('stories.update')
     // Create story routes
-    router.get('/stories/create', [EditStoryController, 'index']).as('stories.create')
-    router.post('/stories', [EditStoryController, 'handleAction']).as('stories.store')
+    router.get('/story/create', [EditStoryController, 'index']).as('stories.create')
+    router.post('/story', [EditStoryController, 'handleAction']).as('stories.store')
   })
   .use(middleware.auth())
 
