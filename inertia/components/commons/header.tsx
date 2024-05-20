@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { MenuCommand } from '~/components/commons/menu_command'
+import { UserProfile } from '~/components/commons/user_profile'
 
 const headerLinks = [
   {
@@ -232,7 +233,12 @@ function HeaderDesktop() {
             <h1 className={'ahsing ml-3 text-2xl '}>Feelwords</h1>
           </div>
 
-          <MenuCommand />
+          <div className={'flex'}>
+            <MenuCommand />
+            <div className={'ml-3'}>
+              <UserProfile username={'robin'} user_profile_picture_url={''} />
+            </div>
+          </div>
         </nav>
       </header>
     </>
