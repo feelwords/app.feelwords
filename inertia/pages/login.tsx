@@ -33,6 +33,7 @@ export default function Login() {
                   type="email"
                   placeholder="m@example.com"
                   required
+                  className={'text-black'}
                   {...register('email')}
                 />
               </div>
@@ -43,7 +44,14 @@ export default function Login() {
                     Mot de passe oublié ?
                   </a>
                 </div>
-                <Input id="password" type="password" required {...register('password')} />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder={'********'}
+                  required
+                  className={'text-black'}
+                  {...register('password')}
+                />
               </div>
               <Button variant={'fw'} type="submit" className="w-full">
                 Se connecter
