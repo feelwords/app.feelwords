@@ -2,6 +2,9 @@ import React, { ReactElement, useEffect, useState } from 'react'
 import { MenuCommand } from '~/components/commons/menu_command'
 import { UserProfile } from '~/components/commons/user_profile'
 import Category from '#models/category'
+import axios from 'axios'
+import User from '#models/user'
+import { API_URL } from '../../../utils/axios'
 
 const headerLinks = [
   {
@@ -72,43 +75,17 @@ const headerLinks = [
         fill={'none'}
       >
         <path
-          d="M20.5 16.9286V10C20.5 6.22876 20.5 4.34315 19.3284 3.17157C18.1569 2 16.2712 2 12.5 2H11.5C7.72876 2 5.84315 2 4.67157 3.17157C3.5 4.34315 3.5 6.22876 3.5 10V19.5"
+          d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
-        />
-        <path
-          d="M20.5 17H6C4.61929 17 3.5 18.1193 3.5 19.5C3.5 20.8807 4.61929 22 6 22H20.5"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M20.5 22C19.1193 22 18 20.8807 18 19.5C18 18.1193 19.1193 17 20.5 17"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M15 7L9 7"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M12 11L9 11"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
         />
       </svg>
     ),
   },
   {
     title: 'Écriture',
-    href: '/write',
+    href: '/stories',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -186,28 +163,32 @@ const headerLinks = [
   },
 ]
 
-export const Header = ({
-  fullName,
-  user_profile_picture_url,
-  user_id,
-  categories,
-}: {
-  user_profile_picture_url: string
-  fullName: string
-  user_id: number
-  categories: Category[]
-}) => {
+export const Header = () => {
+  const [currentUser, setCurrentUser] = useState<User>()
+  const [categories, setCategories] = useState<Category[]>([])
+
+  useEffect(() => {
+    Promise.all([axios.get(`${API_URL}/categories`), axios.get(`${API_URL}/me`)]).then(
+      ([categoriesResponse, meResponse]) => {
+        setCurrentUser(meResponse.data)
+        setCategories(categoriesResponse.data)
+      }
+    )
+  }, [])
+
+  if (!currentUser) return null
+
   return (
     <>
       <HeaderMobile
-        user_id={user_id}
-        fullName={fullName}
-        user_profile_picture_url={user_profile_picture_url}
+        user_id={currentUser.id}
+        fullName={currentUser.fullName}
+        user_profile_picture_url={currentUser.profile_picture}
       />
       <HeaderDesktop
-        user_id={user_id}
-        fullName={fullName}
-        user_profile_picture_url={user_profile_picture_url}
+        user_id={currentUser.id}
+        fullName={currentUser.fullName}
+        user_profile_picture_url={currentUser.profile_picture}
         categories={categories}
       />
     </>
@@ -219,8 +200,8 @@ function HeaderMobile({
   user_profile_picture_url,
   user_id,
 }: {
-  fullName: string
-  user_profile_picture_url: string
+  fullName: string | null
+  user_profile_picture_url: string | null
   user_id: number
 }) {
   const [activeLink, setActiveLink] = useState(window.location.pathname)
@@ -246,7 +227,7 @@ function HeaderMobile({
           user_id={user_id}
         />
       </header>
-      <nav className={'flex justify-around md:hidden fixed bottom-0 bg-[#444444] w-full p-4'}>
+      <nav className={'flex justify-around md:hidden fixed bottom-0 bg-fw-light-black w-full p-4'}>
         {headerLinks.map((link) => (
           <HeaderMobileItem key={link.title} {...link} isActive={activeLink === link.href} />
         ))}
@@ -261,8 +242,8 @@ function HeaderDesktop({
   user_id,
   categories,
 }: {
-  fullName: string
-  user_profile_picture_url: string
+  fullName: string | null
+  user_profile_picture_url: string | null
   user_id: number
   categories: Category[]
 }) {

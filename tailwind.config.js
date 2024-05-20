@@ -23,6 +23,7 @@ module.exports = {
         'fw-secondary': '#A099EF',
         'fw-accent': '#4A3CEF',
         'fw-black': '#141414',
+        'fw-light-black': '#2b2b2b',
         'border': 'hsl(var(--border))',
         'input': 'hsl(var(--input))',
         'ring': 'hsl(var(--ring))',
