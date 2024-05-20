@@ -1,15 +1,5 @@
 import * as React from 'react'
-import {
-  BookPlus,
-  Clapperboard,
-  CreditCard,
-  Heart,
-  Library,
-  Medal,
-  Pickaxe,
-  User,
-  UsersRound,
-} from 'lucide-react'
+import { BookPlus, CreditCard, Library, Medal, User, UsersRound } from 'lucide-react'
 
 import {
   CommandDialog,
@@ -21,8 +11,13 @@ import {
   CommandSeparator,
 } from '~/components/ui/command'
 import { Button } from '~/components/ui/button'
+import Category from '#models/category'
 
-export function MenuCommand() {
+interface MenuCommandProps {
+  categories: Category[]
+}
+
+export function MenuCommand({ categories }: MenuCommandProps) {
   const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
@@ -73,18 +68,11 @@ export function MenuCommand() {
           <CommandSeparator />
 
           <CommandGroup heading="Catégories">
-            <CommandItem>
-              <Clapperboard className="mr-2 h-4 w-4" />
-              <span>Action</span>
-            </CommandItem>
-            <CommandItem>
-              <Pickaxe className="mr-2 h-4 w-4" />
-              <span>Aventure</span>
-            </CommandItem>
-            <CommandItem>
-              <Heart className="mr-2 h-4 w-4" />
-              <span>Amour</span>
-            </CommandItem>
+            {categories.map((category) => (
+              <CommandItem key={category.id}>
+                <span>{category.label}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
 
           <CommandGroup heading="Espace écriture">

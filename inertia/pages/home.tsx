@@ -7,6 +7,7 @@ export default function Home({
   fullName,
   user_profile_picture_url,
   user_id,
+  categories,
 }: InferPageProps<HomeController, 'show'>) {
   return (
     <>
@@ -16,6 +17,7 @@ export default function Home({
           user_id={user_id}
           fullName={fullName}
           user_profile_picture_url={user_profile_picture_url}
+          categories={categories}
         />
       </main>
     </>

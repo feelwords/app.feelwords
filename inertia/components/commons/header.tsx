@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { MenuCommand } from '~/components/commons/menu_command'
 import { UserProfile } from '~/components/commons/user_profile'
+import Category from '#models/category'
 
 const headerLinks = [
   {
@@ -189,10 +190,12 @@ export const Header = ({
   fullName,
   user_profile_picture_url,
   user_id,
+  categories,
 }: {
   user_profile_picture_url: string
   fullName: string
   user_id: number
+  categories: Category[]
 }) => {
   return (
     <>
@@ -205,6 +208,7 @@ export const Header = ({
         user_id={user_id}
         fullName={fullName}
         user_profile_picture_url={user_profile_picture_url}
+        categories={categories}
       />
     </>
   )
@@ -255,10 +259,12 @@ function HeaderDesktop({
   fullName,
   user_profile_picture_url,
   user_id,
+  categories,
 }: {
   fullName: string
   user_profile_picture_url: string
   user_id: number
+  categories: Category[]
 }) {
   return (
     <>
@@ -274,7 +280,7 @@ function HeaderDesktop({
           </div>
 
           <div className={'flex'}>
-            <MenuCommand />
+            <MenuCommand categories={categories} />
             <div className={'ml-3'}>
               <UserProfile
                 fullName={fullName}
