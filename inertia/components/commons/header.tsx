@@ -185,16 +185,40 @@ const headerLinks = [
   },
 ]
 
-export const Header = () => {
+export const Header = ({
+  fullName,
+  user_profile_picture_url,
+  user_id,
+}: {
+  user_profile_picture_url: string
+  fullName: string
+  user_id: number
+}) => {
   return (
     <>
-      <HeaderMobile />
-      <HeaderDesktop />
+      <HeaderMobile
+        user_id={user_id}
+        fullName={fullName}
+        user_profile_picture_url={user_profile_picture_url}
+      />
+      <HeaderDesktop
+        user_id={user_id}
+        fullName={fullName}
+        user_profile_picture_url={user_profile_picture_url}
+      />
     </>
   )
 }
 
-function HeaderMobile() {
+function HeaderMobile({
+  fullName,
+  user_profile_picture_url,
+  user_id,
+}: {
+  fullName: string
+  user_profile_picture_url: string
+  user_id: number
+}) {
   const [activeLink, setActiveLink] = useState(window.location.pathname)
 
   useEffect(() => {
@@ -212,7 +236,11 @@ function HeaderMobile() {
     <>
       <header className={'w-full flex md:hidden justify-between items-center backdrop-blur-sm p-4'}>
         <img src="/assets/images/feelwordslogo.png" alt="logo" className={'w-10 h-10 rounded-xl'} />
-        <UserProfile username={'robin'} user_profile_picture_url={''} />
+        <UserProfile
+          fullName={fullName}
+          user_profile_picture_url={user_profile_picture_url}
+          user_id={user_id}
+        />
       </header>
       <nav className={'flex justify-around md:hidden fixed bottom-0 bg-[#444444] w-full p-4'}>
         {headerLinks.map((link) => (
@@ -223,7 +251,15 @@ function HeaderMobile() {
   )
 }
 
-function HeaderDesktop() {
+function HeaderDesktop({
+  fullName,
+  user_profile_picture_url,
+  user_id,
+}: {
+  fullName: string
+  user_profile_picture_url: string
+  user_id: number
+}) {
   return (
     <>
       <header className={'md:flex hidden'}>
@@ -240,7 +276,11 @@ function HeaderDesktop() {
           <div className={'flex'}>
             <MenuCommand />
             <div className={'ml-3'}>
-              <UserProfile username={'robin'} user_profile_picture_url={''} />
+              <UserProfile
+                fullName={fullName}
+                user_profile_picture_url={user_profile_picture_url}
+                user_id={user_id}
+              />
             </div>
           </div>
         </nav>
