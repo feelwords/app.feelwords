@@ -4,7 +4,6 @@ import { Plus } from 'lucide-react'
 import { Container } from '~/components/commons/container'
 import { H1 } from '~/components/commons/H1'
 import { Header } from '~/components/commons/header'
-import * as React from 'react'
 import { useEffect, useState } from 'react'
 
 import {
@@ -125,7 +124,7 @@ function List() {
     <>
       <div className={'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 '}>
         {stories.map((story) => (
-          <DrawerDialog key={story.id} story={story} />
+          <DrawerDialog key={story.id} story={story} trigger={<StoryCard story={story} />} />
         ))}
       </div>
     </>
@@ -148,45 +147,45 @@ function StoryCard({ story }: any) {
 }
 
 function AddStoryButton() {
+  const trigger = (
+    <>
+      <Plus />
+      <span className={'hidden lg:block'}>Histoire</span>
+    </>
+  )
   return (
     <>
       <Button
         className={
-          'absolute right-7 bottom-20 lg:hidden rounded-full h-12 w-12 flex items-center justify-center'
+          'absolute right-7 bottom-20 lg:right-0 lg:bottom-0 lg:relative lg:flex rounded-full lg:rounded h-12 w-12 lg:w-auto lg:h-auto flex items-center justify-center'
         }
         variant={'fw'}
-        asChild
       >
-        <a href={'/story/create'}>
-          <Plus />
-        </a>
-      </Button>
-      <Button className={'hidden lg:flex items-center'} variant={'fw'} asChild>
-        <a href={'/story/create'}>
-          <Plus className={'h-5 w-5 mr-2'} />
-          Histoire
-        </a>
+        <DrawerDialog trigger={trigger} />
       </Button>
     </>
   )
 }
 
-function DrawerDialog({ story }: any) {
-  const [open, setOpen] = React.useState(false)
+function DrawerDialog({ story, trigger }: { story?: any; trigger: JSX.Element }) {
+  const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  const isEditing = story !== undefined
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger>
-          <StoryCard story={story} />
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogTrigger>{trigger}</DialogTrigger>
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Modification de {story.title}</DialogTitle>
+            <DialogTitle>
+              {isEditing ? `Modification de ${story.title}` : "Création d'une histoire"}
+            </DialogTitle>
             <DialogDescription>
-              Modifiez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez
-              terminé.
+              {isEditing
+                ? 'Modifiez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez terminé.'
+                : 'Remplissez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez'}
             </DialogDescription>
           </DialogHeader>
           <StoryForm story={story} />
@@ -197,15 +196,16 @@ function DrawerDialog({ story }: any) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger>
-        <StoryCard story={story} />
-      </DrawerTrigger>
+      <DrawerTrigger>{trigger}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Modification de {story.title}</DrawerTitle>
+          <DrawerTitle>
+            {isEditing ? `Modification de ${story.title}` : "Création d'une histoire"}
+          </DrawerTitle>
           <DrawerDescription>
-            Modifiez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez
-            terminé.
+            {isEditing
+              ? 'Modifiez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez terminé.'
+              : 'Remplissez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez'}
           </DrawerDescription>
         </DrawerHeader>
         <StoryForm story={story} className="px-4" />
@@ -219,18 +219,18 @@ function DrawerDialog({ story }: any) {
   )
 }
 
-function StoryForm({ className, story }: { className?: string; story: any }) {
-  const categories = story.categories.map((category: any) => category.label)
+function StoryForm({ className, story }: { className?: string; story?: any }) {
+  const categories = story?.categories.map((category: any) => category?.label) || []
 
   return (
-    <form className={cn('grid items-start gap-4 h-[450px] overflow-y-auto', className)}>
+    <form className={cn('grid items-start gap-4 h-[450px] overflow-y-auto p-2', className)}>
       <div className="grid gap-2">
         <Label htmlFor="title">Titre*</Label>
-        <Input type="title" id="title" required defaultValue={story.title} />
+        <Input type="title" id="title" required defaultValue={story?.title} />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="description">Description*</Label>
-        <Textarea id="description" required defaultValue={story.description} />
+        <Textarea id="description" required defaultValue={story?.description} />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="cover">Page de couverture*</Label>
@@ -238,7 +238,7 @@ function StoryForm({ className, story }: { className?: string; story: any }) {
       </div>
       <div className="grid gap-2">
         <Label htmlFor="ended">Terminée</Label>
-        <Switch id="ended" defaultChecked={story.ended} />
+        <Switch id="ended" defaultChecked={story?.ended} />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="categories">Catégories</Label>
@@ -273,7 +273,7 @@ const MultiSelect = ({ categories }: { categories: string[] }) => {
       </MultiSelectorTrigger>
       <MultiSelectorContent>
         <MultiSelectorList>
-          {options.map((option, i) => (
+          {options?.map((option, i) => (
             <MultiSelectorItem key={i} value={option.label}>
               {option.label}
             </MultiSelectorItem>
