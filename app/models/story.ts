@@ -18,7 +18,7 @@ export default class Story extends BaseModel {
   declare cover: string
 
   @column()
-  declare published: boolean
+  declare ended: boolean
 
   @manyToMany(() => Category)
   declare categories: ManyToMany<typeof Category>

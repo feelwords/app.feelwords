@@ -2,8 +2,8 @@ import React, { ReactElement, useEffect, useState } from 'react'
 import { MenuCommand } from '~/components/commons/menu_command'
 import { UserProfile } from '~/components/commons/user_profile'
 import Category from '#models/category'
-import axios from 'axios'
-import { API_URL } from '../../../utils/axios'
+import { useCurrentUser } from '~/hooks/use_current_user'
+import { getAllCategories } from '~/actions/categories'
 import User from '#models/user'
 
 const headerLinks = [
@@ -164,16 +164,17 @@ const headerLinks = [
 ]
 
 export const Header = () => {
-  const [currentUser, setCurrentUser] = useState<User>()
+  const {
+    currentUser,
+  }: {
+    currentUser: User | null
+  } = useCurrentUser()
   const [categories, setCategories] = useState<Category[]>([])
 
   useEffect(() => {
-    Promise.all([axios.get(`${API_URL}/categories`), axios.get(`${API_URL}/me`)]).then(
-      ([categoriesResponse, meResponse]) => {
-        setCurrentUser(meResponse.data)
-        setCategories(categoriesResponse.data)
-      }
-    )
+    getAllCategories().then((response) => {
+      setCategories(response.data)
+    })
   }, [])
 
   if (!currentUser) return null
@@ -227,7 +228,9 @@ function HeaderMobile({
           user_id={user_id}
         />
       </header>
-      <nav className={'flex justify-around md:hidden fixed bottom-0 bg-fw-light-black w-full p-4'}>
+      <nav
+        className={'z-20 flex justify-around md:hidden fixed bottom-0 bg-fw-light-black w-full p-4'}
+      >
         {headerLinks.map((link) => (
           <HeaderMobileItem key={link.title} {...link} isActive={activeLink === link.href} />
         ))}
@@ -249,7 +252,7 @@ function HeaderDesktop({
 }) {
   return (
     <>
-      <header className={'md:flex hidden'}>
+      <header className={'z-10 md:flex hidden'}>
         <nav className={'w-full flex justify-between items-center backdrop-blur-sm p-4'}>
           <div className={'flex items-center mr-8'}>
             <img

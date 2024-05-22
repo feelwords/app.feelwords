@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('title').notNullable()
       table.text('description').nullable()
       table.string('cover').nullable()
-      table.boolean('published').defaultTo(false)
+      table.boolean('ended').defaultTo(false)
 
       table.integer('user_id').unsigned().references('id').inTable('users')
 
