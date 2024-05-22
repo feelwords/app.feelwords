@@ -10,8 +10,8 @@ export default class extends BaseSchema {
       table.integer('story_id').unsigned().references('id').inTable('stories')
       table.integer('category_id').unsigned().references('id').inTable('categories')
 
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.timestamp('created_at').defaultTo(this.now())
+      table.timestamp('updated_at').defaultTo(this.now())
     })
   }
 

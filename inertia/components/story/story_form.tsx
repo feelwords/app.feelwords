@@ -85,7 +85,7 @@ export function StoryForm({
             className="w-32 h-32 rounded-xl object-cover"
           />
         )}
-        {story?.cover && !coverFile && (
+        {story?.cover && (
           <img src={story.cover} alt="cover" className="w-32 h-32 rounded-xl object-cover" />
         )}
       </div>
