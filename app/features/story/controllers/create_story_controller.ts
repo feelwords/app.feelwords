@@ -15,7 +15,7 @@ export default class CreateStoryController {
 
     const story = await Story.create({
       ...payload,
-      cover: payload.cover.filePath,
+      cover: payload.cover.tmpPath,
     })
 
     // Associate creator with the story created

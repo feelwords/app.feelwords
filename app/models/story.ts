@@ -21,7 +21,9 @@ export default class Story extends BaseModel {
   @column()
   declare ended: boolean
 
-  @manyToMany(() => Category)
+  @manyToMany(() => Category, {
+    pivotTable: 'story_categories',
+  })
   declare categories: ManyToMany<typeof Category>
 
   @hasMany(() => Chapter)

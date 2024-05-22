@@ -5,8 +5,12 @@ import { Header } from '~/components/commons/header'
 import { Toaster } from '../../../src/components/ui/sonner'
 import { AddStoryButton } from '~/components/story/add_story_button'
 import { ListStory } from '~/components/story/list_story'
+import { InferPageProps } from '@adonisjs/inertia/types'
+import IndexStoryController from '../../../app/features/story/controllers/index_story_controller'
 
-export default function IndexStory() {
+export default function IndexStory({ stories }: InferPageProps<IndexStoryController, 'index'>) {
+  console.log(stories)
+
   return (
     <>
       <Head title="Vos histoires" />
@@ -15,7 +19,7 @@ export default function IndexStory() {
         <Header />
         <Container>
           <HeaderStory />
-          <ListStory stories={[]} />
+          <ListStory stories={stories} />
         </Container>
       </main>
     </>

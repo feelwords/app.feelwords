@@ -1,17 +1,17 @@
 import { HttpContext } from '@adonisjs/core/http'
+import Story from '#models/story'
 
 export default class IndexStoryController {
-  async index({ inertia }: HttpContext) {
-    // todo: Get all my stories
+  async index({ inertia, auth }: HttpContext) {
+    const currentUser = auth.getUserOrFail()
+    const stories = await Story.query()
+      .where('user_id', currentUser.id)
+      .preload('user')
+      .preload('categories')
+      .preload('chapters')
 
-    return inertia.render('story/index')
-  }
-
-  async show({}: HttpContext) {
-    // todo: Get a story by id
-  }
-
-  async destroy({}: HttpContext) {
-    // todo : Delete a story
+    return inertia.render('story/index', {
+      stories,
+    })
   }
 }

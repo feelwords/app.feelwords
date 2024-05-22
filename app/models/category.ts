@@ -10,7 +10,9 @@ export default class Category extends BaseModel {
   @column()
   declare label: string
 
-  @manyToMany(() => Story)
+  @manyToMany(() => Story, {
+    pivotTable: 'story_categories',
+  })
   declare stories: ManyToMany<typeof Story>
 
   @column.dateTime({ autoCreate: true })

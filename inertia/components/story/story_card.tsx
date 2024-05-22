@@ -1,4 +1,10 @@
-export function StoryCard({ story }: any) {
+import Story from '#models/story'
+
+interface StoryProps {
+  story: Story
+}
+
+export function StoryCard({ story }: StoryProps) {
   return (
     <div className={'relative p-3 flex flex-col items-center'}>
       <img src={story.cover} className={'aspect-square rounded-3xl object-cover'} />

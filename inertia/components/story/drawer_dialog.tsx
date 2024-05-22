@@ -20,8 +20,9 @@ import {
   DrawerTrigger,
 } from '~/components/ui/drawer'
 import { Button } from '~/components/ui/button'
+import Story from '#models/story'
 
-export function DrawerDialog({ story, trigger }: { story?: any; trigger: JSX.Element }) {
+export function DrawerDialog({ story, trigger }: { story?: Story; trigger: JSX.Element }) {
   const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
