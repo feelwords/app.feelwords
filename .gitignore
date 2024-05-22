@@ -2,7 +2,6 @@
 node_modules
 build
 tmp
-uploads
 
 # Secrets
 .env
@@ -24,3 +23,4 @@ yarn-error.log
 
 # Platform specific
 .DS_Store
+/uploads/

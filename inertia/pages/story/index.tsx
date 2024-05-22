@@ -40,11 +40,15 @@ import {
 } from '~/components/ui/multi-select'
 import { getAllCategories } from '~/actions/categories'
 import Category from '#models/category'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Toaster } from '../../../src/components/ui/sonner'
+import { createStory } from '~/actions/story'
 
 export default function IndexStory() {
   return (
     <>
       <Head title="Vos histoires" />
+      <Toaster />
       <main className={'text-white'}>
         <Header />
         <Container>
@@ -66,64 +70,12 @@ function HeaderStory() {
 }
 
 function List() {
-  const stories = [
-    {
-      id: 1,
-      title: 'Mon histoire',
-      description: 'Une histoire sur la vie',
-      cover: 'https://nextui.org/images/hero-card.jpeg',
-      published: true,
-      createdAt: '2021-08-01T00:00:00Z',
-      updatedAt: '2021-08-01T00:00:00Z',
-      user: {},
-      categories: [
-        {
-          id: 1,
-          label: 'Vie',
-        },
-      ],
-    },
-    {
-      id: 1,
-      title: 'Mon histoire',
-      description: 'Une histoire sur la vie',
-      cover: 'https://nextui.org/images/hero-card.jpeg',
-      published: true,
-      createdAt: '2021-08-01T00:00:00Z',
-      updatedAt: '2021-08-01T00:00:00Z',
-      user: {},
-      categories: [
-        {
-          id: 1,
-          label: 'Vie',
-        },
-      ],
-    },
-    {
-      id: 1,
-      title: 'Mon histoire',
-      description: 'Une histoire sur la vie',
-      cover: 'https://nextui.org/images/hero-card.jpeg',
-      published: true,
-      createdAt: '2021-08-01T00:00:00Z',
-      updatedAt: '2021-08-01T00:00:00Z',
-      user: {},
-      categories: [
-        {
-          id: 1,
-          label: 'Vie',
-        },
-        {
-          id: 2,
-          label: 'Amour',
-        },
-      ],
-    },
-  ]
+  // todo: fetch stories
+  const stories = []
   return (
     <>
       <div className={'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 '}>
-        {stories.map((story) => (
+        {stories?.map((story) => (
           <DrawerDialog key={story.id} story={story} trigger={<StoryCard story={story} />} />
         ))}
       </div>
@@ -155,14 +107,13 @@ function AddStoryButton() {
   )
   return (
     <>
-      <Button
+      <div
         className={
-          'absolute right-7 bottom-20 lg:right-0 lg:bottom-0 lg:relative lg:flex rounded-full lg:rounded h-12 w-12 lg:w-auto lg:h-auto flex items-center justify-center'
+          'absolute bg-gradient-to-t to-fw-accent from-fw-secondary right-7 bottom-20 lg:right-0 lg:bottom-0 lg:relative lg:flex rounded-full lg:rounded h-12 w-12 lg:w-auto lg:h-auto flex items-center justify-center'
         }
-        variant={'fw'}
       >
         <DrawerDialog trigger={trigger} />
-      </Button>
+      </div>
     </>
   )
 }
@@ -188,7 +139,7 @@ function DrawerDialog({ story, trigger }: { story?: any; trigger: JSX.Element })
                 : 'Remplissez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez'}
             </DialogDescription>
           </DialogHeader>
-          <StoryForm story={story} />
+          <StoryForm story={story} setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     )
@@ -208,7 +159,7 @@ function DrawerDialog({ story, trigger }: { story?: any; trigger: JSX.Element })
               : 'Remplissez les détails de votre histoire ici. Cliquez sur enregistrer lorsque vous avez'}
           </DrawerDescription>
         </DrawerHeader>
-        <StoryForm story={story} className="px-4" />
+        <StoryForm story={story} setOpen={setOpen} className="px-4" />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Annuler</Button>
@@ -219,43 +170,118 @@ function DrawerDialog({ story, trigger }: { story?: any; trigger: JSX.Element })
   )
 }
 
-function StoryForm({ className, story }: { className?: string; story?: any }) {
+type Inputs = {
+  title: string
+  description: string
+  cover: FileList
+  ended: boolean
+}
+
+function StoryForm({
+  className,
+  story,
+  setOpen,
+}: {
+  className?: string
+  story?: any
+  setOpen: (value: boolean) => void
+}) {
   const categories = story?.categories.map((category: any) => category?.label) || []
+  const { register, handleSubmit, watch } = useForm<Inputs>()
+  const [categoriesValue, setCategoriesValue] = useState<string[]>(categories)
+  const [ended, setEnded] = useState<boolean>(story?.ended || false)
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    if (story) {
+      // Update story
+    } else {
+      createStory(
+        {
+          data: {
+            ...data,
+            ended: ended,
+            categoriesValue: categoriesValue,
+          },
+        },
+        {
+          setOpen,
+        }
+      )
+    }
+  }
+
+  const coverFile = watch('cover') // Pour prévisualiser l'image sélectionnée
 
   return (
-    <form className={cn('grid items-start gap-4 h-[450px] overflow-y-auto p-2', className)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={cn('grid items-start gap-4 h-[450px] overflow-y-auto p-2', className)}
+    >
       <div className="grid gap-2">
         <Label htmlFor="title">Titre*</Label>
-        <Input type="title" id="title" required defaultValue={story?.title} />
+        <Input
+          {...register('title', { required: true })}
+          type="text"
+          id="title"
+          required
+          defaultValue={story?.title}
+        />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="description">Description*</Label>
-        <Textarea id="description" required defaultValue={story?.description} />
+        <Textarea
+          {...register('description', { required: true })}
+          id="description"
+          required
+          defaultValue={story?.description}
+        />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="cover">Page de couverture*</Label>
-        <Input id="cover" type="file" required />
+        <Label htmlFor="cover">Page de couverture{!story ? '*' : ''}</Label>
+        <Input {...register('cover', { required: !story })} id="cover" type="file" />
+        {coverFile && coverFile.length > 0 && (
+          <img
+            src={URL.createObjectURL(coverFile[0])}
+            alt="cover"
+            className="w-32 h-32 rounded-xl object-cover"
+          />
+        )}
+        {story?.cover && !coverFile && (
+          <img src={story.cover} alt="cover" className="w-32 h-32 rounded-xl object-cover" />
+        )}
       </div>
       <div className="grid gap-2">
         <Label htmlFor="ended">Terminée</Label>
-        <Switch id="ended" defaultChecked={story?.ended} />
+        <Switch
+          {...register('ended')}
+          id="ended"
+          onCheckedChange={(e) => setEnded(e)}
+          defaultChecked={false}
+        />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="categories">Catégories</Label>
-        <MultiSelect categories={categories} />
+        <MultiSelect categoriesValue={categoriesValue} setCategoriesValue={setCategoriesValue} />
       </div>
-      <div className="grid gap-2">
-        <Label htmlFor="chapters">Chapitres</Label>
-        todo
-      </div>
+      {story && (
+        <div className="grid gap-2">
+          <Label htmlFor="chapters">Chapitres</Label>
+          todo
+        </div>
+      )}
       <Button type="submit">Enregistrer les modifications</Button>
     </form>
   )
 }
 
-const MultiSelect = ({ categories }: { categories: string[] }) => {
+const MultiSelect = ({
+  setCategoriesValue,
+  categoriesValue,
+}: {
+  setCategoriesValue: (value: string[]) => void
+  categoriesValue: string[]
+}) => {
   let [options, setOptions] = useState<{ value: string; label: string }[]>([])
-  const [value, setValue] = useState<string[]>(categories)
 
   useEffect(() => {
     getAllCategories().then((response) => {
@@ -267,7 +293,7 @@ const MultiSelect = ({ categories }: { categories: string[] }) => {
   }, [])
 
   return (
-    <MultiSelector values={value} onValuesChange={setValue} loop={false}>
+    <MultiSelector values={categoriesValue} onValuesChange={setCategoriesValue} loop={false}>
       <MultiSelectorTrigger>
         <MultiSelectorInput placeholder="Vos catégories" />
       </MultiSelectorTrigger>

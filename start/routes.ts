@@ -10,20 +10,30 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
-const SocialAuthsController = () => import('../app/auth/controllers/social_auths_controller.js')
+const CreateStoryController = () =>
+  import('../app/features/story/controllers/create_story_controller.js')
 
-const ApiCategoryController = () => import('../app/category/controllers/api_category_controller.js')
+const DeleteStoryController = () =>
+  import('../app/features/story/controllers/delete_story_controller.js')
 
-const ApiUserController = () => import('../app/user/controllers/api_user_controller.js')
+const SocialAuthsController = () =>
+  import('../app/features/auth/controllers/social_auths_controller.js')
 
-const IndexStoryController = () => import('../app/story/controllers/index_story_controller.js')
-const EditStoryController = () => import('../app/story/controllers/edit_story_controller.js')
+const ApiCategoryController = () =>
+  import('../app/features/category/controllers/api_category_controller.js')
 
-const LogoutController = () => import('../app/auth/controllers/logout_controller.js')
+const ApiUserController = () => import('../app/features/user/controllers/api_user_controller.js')
 
-const RegistersController = () => import('../app/auth/controllers/register_controller.js')
+const IndexStoryController = () =>
+  import('../app/features/story/controllers/index_story_controller.js')
+const EditStoryController = () =>
+  import('../app/features/story/controllers/edit_story_controller.js')
 
-const LoginController = () => import('../app/auth/controllers/login_controller.js')
+const LogoutController = () => import('../app/features/auth/controllers/logout_controller.js')
+
+const RegistersController = () => import('../app/features/auth/controllers/register_controller.js')
+
+const LoginController = () => import('../app/features/auth/controllers/login_controller.js')
 
 const HomeController = () => import('#controllers/home_controller')
 
@@ -53,14 +63,6 @@ router
 
     // Story routes
     router.get('/stories', [IndexStoryController, 'index']).as('stories.index')
-    router.get('/story/:id', [IndexStoryController, 'show']).as('stories.show')
-    router.delete('/story/:id', [IndexStoryController, 'destroy']).as('stories.destroy')
-    // Edit story routes
-    router.get('/story/:id/edit', [EditStoryController, 'index']).as('stories.edit')
-    router.patch('/story/:id', [EditStoryController, 'handleAction']).as('stories.update')
-    // Create story routes
-    router.get('/story/create', [EditStoryController, 'index']).as('stories.create')
-    router.post('/story', [EditStoryController, 'handleAction']).as('stories.store')
   })
   .use(middleware.auth())
 
@@ -72,6 +74,11 @@ router
 
     // user
     router.get('/me', [ApiUserController, 'me']).as('api.user.me')
+
+    //story
+    router.delete('/story/:id', [DeleteStoryController, 'handleAction']).as('stories.destroy')
+    router.patch('/story/:id', [EditStoryController, 'handleAction']).as('stories.update')
+    router.post('/story', [CreateStoryController, 'handleAction']).as('stories.store')
   })
   .prefix('api/v1')
   .use(middleware.auth())
