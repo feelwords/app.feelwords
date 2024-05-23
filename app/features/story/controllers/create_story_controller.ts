@@ -26,7 +26,7 @@ export default class CreateStoryController {
       return response.status(201).json(story)
     } catch (error) {
       console.error(error) // Basic error logging
-      return response.status(500).json({ message: 'An unexpected error occurred' })
+      return response.status(500).json({ message: error })
     }
   }
 

@@ -33,14 +33,14 @@ export const createStory = (
         'Content-Type': 'multipart/form-data',
       },
     })
-    .then((response) => {
-      if (response.status !== 201) {
-        toast('Une erreur est survenue', {
-          description: response.data.message,
-        })
-        return
-      }
+    .then(() => {
       toast('Histoire créée avec succès')
       setOpen(false)
+    })
+    .catch((e) => {
+      const errors = e.response.data.message.messages
+      toast('Une erreur est survenue', {
+        description: errors.map((error: { message: string }) => error.message).join(', '),
+      })
     })
 }
