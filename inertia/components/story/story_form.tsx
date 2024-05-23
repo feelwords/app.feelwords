@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useState } from 'react'
-import { createStory } from '~/actions/story'
+import { createStory, editStory } from '~/actions/story'
 import { cn } from '~/lib/utils'
 import { Label } from '~/components/ui/label'
 import { Input } from '~/components/ui/input'
@@ -31,8 +31,21 @@ export function StoryForm({
   const [ended, setEnded] = useState<boolean>(story?.ended || false)
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    // case : edit and cover is not changed then we need to keep the current cover path
     if (story) {
-      // Update story
+      editStory(
+        {
+          data: {
+            ...data,
+            id: story.id,
+            ended: ended,
+            categoriesValue: categoriesValue,
+          },
+        },
+        {
+          setOpen,
+        }
+      )
     } else {
       createStory(
         {
@@ -95,7 +108,8 @@ export function StoryForm({
           {...register('ended')}
           id="ended"
           onCheckedChange={(e) => setEnded(e)}
-          defaultChecked={false}
+          defaultChecked={story?.ended || false}
+          defaultValue={story?.ended || false}
         />
       </div>
       <div className="grid gap-2">

@@ -77,7 +77,7 @@ router
 
     //story
     router.delete('/story/:id', [DeleteStoryController, 'handleAction']).as('stories.destroy')
-    router.patch('/story/:id', [EditStoryController, 'handleAction']).as('stories.update')
+    router.put('/story/:id', [EditStoryController, 'handleAction']).as('stories.update')
     router.post('/story', [CreateStoryController, 'handleAction']).as('stories.store')
   })
   .prefix('api/v1')

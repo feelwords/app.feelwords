@@ -36,7 +36,6 @@ export async function loginUser(data: any) {
       window.location.href = '/'
     }
   } catch (e) {
-    console.log(e.response.data.errors)
     const errors: { message: string }[] = e.response.data.errors
     toast('Une erreur est survenue', {
       className: ERROR_STYLE,
