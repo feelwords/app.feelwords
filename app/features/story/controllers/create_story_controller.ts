@@ -15,9 +15,9 @@ export default class CreateStoryController {
     try {
       const payload = await request.validateUsing(createStoryValidator)
 
-      await this.fileUploadService.moveFile(payload)
+      await this.fileUploadService.moveFile(payload.cover)
 
-      const story = await this.storyService.updateOrCreateStory(payload)
+      const story = await this.storyService.createStory(payload)
 
       await this.storyService.handleCategoryAssociation(payload, story)
 

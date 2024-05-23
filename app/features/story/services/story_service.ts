@@ -1,6 +1,7 @@
 import Story from '#models/story'
 import Category from '#models/category'
 import { HttpContext } from '@adonisjs/core/http'
+import { UPLOAD_PATH } from './file_upload_service.js'
 
 interface Payload {
   id?: number
@@ -12,20 +13,25 @@ interface Payload {
 }
 
 export default class StoryService {
-  async updateOrCreateStory(payload: Payload) {
-    // case : edit and cover is not changed then we need to keep the current cover path
-    if (payload.id && !payload.cover) {
-      const story = await Story.findOrFail(payload.id)
-      payload.cover = story.cover
+  async updateStory(payload: Payload) {
+    const story = await Story.findOrFail(payload.id)
+    const tempCover = story.cover
+    story.merge(payload)
+
+    if (payload.cover) {
+      story.cover = this.getCoverPath(payload.cover.fileName)
     }
 
-    return await Story.updateOrCreate(
-      { id: payload.id },
-      {
-        ...payload,
-        cover: payload.cover,
-      }
-    )
+    story.cover = story.cover || tempCover
+    await story.save()
+    return story
+  }
+
+  async createStory(payload: Payload) {
+    return Story.create({
+      ...payload,
+      cover: this.getCoverPath(payload.cover.fileName),
+    })
   }
 
   async handleCategoryAssociation(payload: Payload, story: Story) {
@@ -39,6 +45,10 @@ export default class StoryService {
 
   async associateCreatorWithStory(story: Story, auth: HttpContext['auth']) {
     await story.related('user').associate(auth.getUserOrFail())
+  }
+
+  private getCoverPath(fileName: string) {
+    return `/${UPLOAD_PATH}/${fileName}`
   }
 
   private async associateStoryWithCategories(story: Story, categories: Category[]) {

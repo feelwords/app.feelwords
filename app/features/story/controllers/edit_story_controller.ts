@@ -14,13 +14,13 @@ export default class EditStoryController {
   async handleAction({ request, response }: HttpContext) {
     try {
       const payload = await request.validateUsing(editStoryValidator)
-      const file = request.file('cover')
+      const cover = request.file('cover')
 
-      if (file) {
-        await this.fileUploadService.moveFile(file)
+      if (cover) {
+        await this.fileUploadService.moveFile(cover)
       }
 
-      const story = await this.storyService.updateOrCreateStory(payload)
+      const story = await this.storyService.updateStory({ ...payload, cover })
 
       await this.storyService.handleCategoryAssociation(payload, story)
 
