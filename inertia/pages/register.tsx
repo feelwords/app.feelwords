@@ -3,7 +3,8 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Head } from '@inertiajs/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import axios from 'axios'
+import { Toaster } from 'sonner'
+import { createUser } from '~/actions/users'
 
 type Inputs = {
   email: string
@@ -14,11 +15,7 @@ type Inputs = {
 export default function Login() {
   const { register, handleSubmit } = useForm<Inputs>()
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    axios.post('/register', data).then((response) => {
-      if (response.status === 201) {
-        window.location.href = '/'
-      }
-    })
+    createUser(data)
   }
 
   const toggleSocialAuth = () => {
@@ -28,10 +25,11 @@ export default function Login() {
   return (
     <>
       <Head title="Création de compte" />
+      <Toaster />
 
       <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 h-screen text-white">
         <div className="flex items-center justify-center py-12">
-          <div onSubmit={handleSubmit(onSubmit)} className="mx-auto grid w-[350px] gap-6">
+          <div className="mx-auto grid w-[350px] gap-6">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-2 text-center">
                 <h1 className="text-3xl font-bold text-white">Créer votre compte</h1>

@@ -11,6 +11,12 @@ export default class RegistersController {
     // Validate the request
     const payload = await request.validateUsing(createUserValidator)
 
+    // verify if the user already exists
+    const userExists = await User.query().where('email', payload.email).first()
+    if (userExists) {
+      return response.status(400).json({ message: 'User already exists' })
+    }
+
     // Create a new user
     const user = await User.create(payload)
 
@@ -18,6 +24,6 @@ export default class RegistersController {
     await auth.use('web').login(user)
 
     // Redirect to the home page
-    return response.redirect().toRoute('home')
+    return response.status(201).json(user)
   }
 }

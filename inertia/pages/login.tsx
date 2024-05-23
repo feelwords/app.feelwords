@@ -3,7 +3,8 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Head } from '@inertiajs/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import axios from 'axios'
+import { Toaster } from 'sonner'
+import { loginUser } from '~/actions/users'
 
 type Inputs = {
   email: string
@@ -13,11 +14,7 @@ type Inputs = {
 export default function Login() {
   const { register, handleSubmit } = useForm<Inputs>()
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    axios.post('/login', data).then((response) => {
-      if (response.status === 201) {
-        window.location.href = '/'
-      }
-    })
+    loginUser(data)
   }
 
   const toggleSocialAuth = () => {
@@ -28,6 +25,7 @@ export default function Login() {
     <>
       <Head title="Connexion à votre compte" />
 
+      <Toaster />
       <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 h-screen text-white">
         <div className="flex items-center justify-center py-12">
           <div className="mx-auto grid w-[350px] gap-6">

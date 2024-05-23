@@ -8,7 +8,6 @@ import Category from '#models/category'
 const UPLOAD_PATH = 'uploads'
 
 export default class CreateStoryController {
-  // todo : add erreur front & back
   // todo : add erreur front & back login register
   async handleAction({ request, response, auth }: HttpContext) {
     try {
