@@ -9,8 +9,6 @@ import { InferPageProps } from '@adonisjs/inertia/types'
 import IndexStoryController from '../../../app/features/story/controllers/index_story_controller'
 
 export default function IndexStory({ stories }: InferPageProps<IndexStoryController, 'index'>) {
-  console.log(stories)
-
   return (
     <>
       <Head title="Vos histoires" />

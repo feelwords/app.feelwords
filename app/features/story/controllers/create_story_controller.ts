@@ -8,10 +8,13 @@ import Category from '#models/category'
 const UPLOAD_PATH = 'uploads'
 
 export default class CreateStoryController {
+  // todo : add erreur front & back
+  // todo : add erreur front & back login register
   async handleAction({ request, response, auth }: HttpContext) {
     try {
       const payload = await request.validateUsing(createStoryValidator)
 
+      // todo : create service
       await this.moveCoverFile(payload)
 
       const story = await this.createStoryWithPayload(payload)
