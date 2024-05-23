@@ -28,13 +28,13 @@ export default class StoryService {
     )
   }
 
-  async handleCategoryAssociation(payload: Payload, story: any) {
-    let categories = payload.categories?.split(',')
-    if (!categories) return
+  async handleCategoryAssociation(payload: Payload, story: Story) {
+    let categoriesPayload = payload.categories?.split(',')
+    if (!categoriesPayload) return
 
-    // todo : check
-    const existingCategories = await Category.query().whereIn('label', categories)
-    await this.associateStoryWithCategories(story, existingCategories)
+    const categories = await Category.query().whereIn('label', categoriesPayload)
+
+    await this.associateStoryWithCategories(story, categories)
   }
 
   async associateCreatorWithStory(story: Story, auth: HttpContext['auth']) {
@@ -42,6 +42,9 @@ export default class StoryService {
   }
 
   private async associateStoryWithCategories(story: Story, categories: Category[]) {
+    // detach all categories first
+    await story.related('categories').detach()
+    // attach new categories
     await story.related('categories').attach(categories.map((c: any) => c.id))
   }
 }
