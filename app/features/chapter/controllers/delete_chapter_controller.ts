@@ -3,8 +3,6 @@ import Chapter from '#models/chapter'
 import ChapterService from '../services/chapter_service.js'
 import { inject } from '@adonisjs/core'
 
-// todo : refactor front to split files
-
 @inject()
 export default class DeleteChapterController {
   constructor(protected chapterService: ChapterService) {}
