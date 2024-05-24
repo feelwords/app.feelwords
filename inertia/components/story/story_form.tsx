@@ -8,6 +8,12 @@ import { Textarea } from '~/components/ui/textarea'
 import { Switch } from '~/components/ui/switch'
 import { Button } from '~/components/ui/button'
 import { MultiSelect } from '~/components/story/multi_select_categories'
+import Chapter from '#models/chapter'
+import { Eye, Heart, MessageSquareText, Plus } from 'lucide-react'
+import axios from 'axios'
+import { API_URL } from '../../../utils/axios'
+import { toast } from 'sonner'
+import { ERROR_STYLE } from '~/lib/sonnar'
 
 type Inputs = {
   title: string
@@ -29,6 +35,8 @@ export function StoryForm({
   const { register, handleSubmit, watch } = useForm<Inputs>()
   const [categoriesValue, setCategoriesValue] = useState<string[]>(categories)
   const [ended, setEnded] = useState<boolean>(story?.ended || false)
+
+  console.log(story)
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     // case : edit and cover is not changed then we need to keep the current cover path
@@ -118,11 +126,70 @@ export function StoryForm({
       </div>
       {story && (
         <div className="grid gap-2">
-          <Label htmlFor="chapters">Chapitres</Label>
-          todo
+          <Label htmlFor="chapters">Chapitres ({story.chapters.length})</Label>
+          <ChapterList chapters={story.chapters} />
+          <ChapterNew storyId={story.id} />
         </div>
       )}
       <Button type="submit">Enregistrer les modifications</Button>
     </form>
+  )
+}
+
+function ChapterList({ chapters }: { chapters: Chapter[] }) {
+  return (
+    <div className="grid gap-2">
+      {chapters.map((chapter: Chapter) => (
+        <a
+          href={`/story/chapter/${chapter.id}`}
+          key={chapter.id}
+          className="flex gap-2 justify-between border p-4"
+        >
+          <span>{chapter.title}</span>
+          <div className={'flex'}>
+            <div className={'flex items-center mx-1'}>
+              <Eye className={'mr-1 h-4 w-4'} />
+              <span>{chapter.view}</span>
+            </div>
+            <div className={'flex items-center mx-1'}>
+              <Heart className={'mr-1 h-4 w-4'} />
+              <span>{chapter.like}</span>
+            </div>
+            <div className={'flex items-center mx-1'}>
+              <MessageSquareText className={'mr-1 h-4 w-4'} />
+              <span>todo</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  )
+}
+
+function ChapterNew({ storyId }: { storyId: number }) {
+  function handleClick() {
+    axios
+      .post(`${API_URL}/story/${storyId}/chapter`, {
+        storyId,
+      })
+      .catch((error) =>
+        toast('Une erreur est survenue lors de la création du chapitre', {
+          description: error.response.data.message,
+          className: ERROR_STYLE,
+        })
+      )
+  }
+
+  return (
+    <button
+      type={'button'}
+      onClick={handleClick}
+      className={'flex items-center justify-center border border-dashed p-4'}
+    >
+      <span className={'flex items-center'}>
+        <Plus />
+        Ajouter un chapitre
+      </span>
+    </button>
   )
 }
