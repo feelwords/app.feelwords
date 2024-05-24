@@ -7,6 +7,21 @@ export default class Chapter extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  @column()
+  declare title: string
+
+  @column()
+  declare content: string
+
+  @column()
+  declare order: number
+
+  @column()
+  declare view: number
+
+  @column()
+  declare like: number
+
   @belongsTo(() => Story)
   declare story: BelongsTo<typeof Story>
 

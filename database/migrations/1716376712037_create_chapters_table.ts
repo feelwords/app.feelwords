@@ -11,7 +11,6 @@ export default class extends BaseSchema {
       table.integer('order').notNullable()
       table.integer('view').defaultTo(0)
       table.integer('like').defaultTo(0)
-      table.string('cover').nullable()
 
       table.integer('story_id').unsigned().references('id').inTable('stories')
 
