@@ -38,6 +38,10 @@ import Chapter from '#models/chapter'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import IndexChapterController from '../../../app/features/chapter/controllers/index_chapter_controller'
 import { deleteChapter } from '~/actions/chapter'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import axios from 'axios'
+import { toast } from 'sonner'
+import { ERROR_STYLE } from '~/lib/sonnar'
 
 export default function IndexChapter({
   chapter,
@@ -148,12 +152,46 @@ export function DrawerDialogChapter({ chapter }: { chapter: Chapter }) {
   )
 }
 
+type Inputs = {
+  title: string
+}
+
 function EditForm({ className, chapter }: { className?: string; chapter: Chapter }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>()
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    axios
+      .put(`/story/${chapter.storyId}/chapter/${chapter.id}`, data)
+      .then(() => {
+        window.location.reload()
+      })
+      .catch((err) => {
+        console.log(err)
+        toast('Une erreur est survenue lors de la modification du chapitre', {
+          className: ERROR_STYLE,
+          description: err.response.data.message || 'Une erreur est survenue',
+        })
+      })
+  }
+
   return (
-    <form className={cn('grid items-start gap-4 mx-4', className)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={cn('grid items-start gap-4 mx-4', className)}
+    >
       <div className="grid gap-2">
         <Label htmlFor="title">Titre*</Label>
-        <Input type="title" id="title" defaultValue={chapter.title} />
+        <Input
+          {...register('title', { required: true })}
+          required
+          type="title"
+          id="title"
+          defaultValue={chapter.title}
+        />
+        {errors.title && <span className={'text-red-500'}>Ce champs est obligatoire</span>}
       </div>
       <Button type="submit">Modifier</Button>
     </form>

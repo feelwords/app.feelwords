@@ -9,6 +9,8 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
+const EditChapterController = () =>
+  import('../app/features/chapter/controllers/edit_chapter_controller.js')
 
 const DeleteChapterController = () =>
   import('../app/features/chapter/controllers/delete_chapter_controller.js')
@@ -78,8 +80,10 @@ router
  */
 router
   .group(() => {
+    // story
     router.delete('/story/:storyId', [DeleteStoryController, 'handleAction']).as('stories.destroy')
     router.put('/story/:storyId', [EditStoryController, 'handleAction']).as('stories.update')
+    // chapter
     router
       .get('/story/:storyId/chapter/:chapterId', [IndexChapterController, 'handleAction'])
       .as('chapter.index')
@@ -89,5 +93,8 @@ router
     router
       .delete('/story/:storyId/chapter/:chapterId', [DeleteChapterController, 'handleAction'])
       .as('stories.deleteChapter')
+    router
+      .put('/story/:storyId/chapter/:chapterId', [EditChapterController, 'handleAction'])
+      .as('stories.updateChapter')
   })
   .middleware([middleware.auth(), middleware.user_story()])
