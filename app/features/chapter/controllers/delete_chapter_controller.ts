@@ -5,7 +5,6 @@ export default class DeleteChapterController {
   async handleAction({ request, response, auth }: HttpContext) {
     const chapterId = request.param('chapterId')
     const user = auth.getUserOrFail()
-    // todo : order chapter by order
     // todo : refactor front to split files
     // Vérification de l'existence du chapitre
     const chapter = await Chapter.query().where('id', chapterId).firstOrFail()

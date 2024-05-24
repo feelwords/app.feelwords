@@ -6,6 +6,7 @@ export default class IndexStoryController {
     const currentUser = auth.getUserOrFail()
     const stories = await Story.query()
       .where('user_id', currentUser.id)
+      .orderBy('updatedAt', 'desc')
       .preload('user')
       .preload('categories')
       .preload('chapters')

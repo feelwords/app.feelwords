@@ -138,29 +138,31 @@ export function StoryForm({
 function ChapterList({ chapters, storyId }: { chapters: Chapter[]; storyId: number }) {
   return (
     <div className="grid gap-2">
-      {chapters.map((chapter: Chapter) => (
-        <a
-          href={`/story/${storyId}/chapter/${chapter.id}`}
-          key={chapter.id}
-          className="flex gap-2 justify-between border p-4"
-        >
-          <span>{chapter.title}</span>
-          <div className={'flex'}>
-            <div className={'flex items-center mx-1'}>
-              <Eye className={'mr-1 h-4 w-4'} />
-              <span>{chapter.view}</span>
+      {chapters
+        .sort((a, b) => a.order - b.order)
+        .map((chapter: Chapter) => (
+          <a
+            href={`/story/${storyId}/chapter/${chapter.id}`}
+            key={chapter.id}
+            className="flex gap-2 justify-between border p-4"
+          >
+            <span>{chapter.title}</span>
+            <div className={'flex'}>
+              <div className={'flex items-center mx-1'}>
+                <Eye className={'mr-1 h-4 w-4'} />
+                <span>{chapter.view}</span>
+              </div>
+              <div className={'flex items-center mx-1'}>
+                <Heart className={'mr-1 h-4 w-4'} />
+                <span>{chapter.like}</span>
+              </div>
+              <div className={'flex items-center mx-1'}>
+                <MessageSquareText className={'mr-1 h-4 w-4'} />
+                <span>todo</span>
+              </div>
             </div>
-            <div className={'flex items-center mx-1'}>
-              <Heart className={'mr-1 h-4 w-4'} />
-              <span>{chapter.like}</span>
-            </div>
-            <div className={'flex items-center mx-1'}>
-              <MessageSquareText className={'mr-1 h-4 w-4'} />
-              <span>todo</span>
-            </div>
-          </div>
-        </a>
-      ))}
+          </a>
+        ))}
     </div>
   )
 }
