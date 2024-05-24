@@ -45,7 +45,9 @@ export const createStory = (
       },
     })
     .then(() => {
-      toast('Histoire créée avec succès')
+      toast('Histoire créée avec succès', {
+        description: 'Veuillez rafraîchir la page pour voir les changements',
+      })
       setOpen(false)
     })
     .catch((e) => {
@@ -76,7 +78,9 @@ export const editStory = (
       },
     })
     .then(() => {
-      toast('Histoire modifiée avec succès')
+      toast('Histoire modifiée avec succès', {
+        description: 'Veuillez rafraîchir la page pour voir les changements',
+      })
       setOpen(false)
     })
     .catch((e) => {
