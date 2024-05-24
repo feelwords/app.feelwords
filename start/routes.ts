@@ -46,61 +46,48 @@ const LoginController = () => import('../app/features/auth/controllers/login_con
 
 const HomeController = () => import('#controllers/home_controller')
 
-// Auth routes
-router.get('/auth/google', [SocialAuthsController, 'redirect']).as('auth.google')
-router.get('/auth/google/callback', [SocialAuthsController, 'callback']).as('auth.google.callback')
-
-// Login routes
-router.group(() => {
-  router.post('/login', [LoginController, 'store']).as('login.store')
-  router.get('/login', [LoginController, 'show']).as('login.show')
-})
-// Logout route
-router.get('/logout', [LogoutController, 'destroy']).as('login.destroy')
-
-// Register routes
 router.group(() => {
   router.post('/register', [RegistersController, 'store']).as('register.store')
   router.get('/register', [RegistersController, 'show']).as('register.show')
+  router.get('/logout', [LogoutController, 'destroy']).as('login.destroy')
+  router.post('/login', [LoginController, 'store']).as('login.store')
+  router.get('/login', [LoginController, 'show']).as('login.show')
+  router.get('/auth/google', [SocialAuthsController, 'redirect']).as('auth.google')
+  router
+    .get('/auth/google/callback', [SocialAuthsController, 'callback'])
+    .as('auth.google.callback')
 })
 
-// Authenticated routes
+/*
+DEFAULT WEB ROUTES
+ */
 router
   .group(() => {
-    // Home
     router.get('/', [HomeController, 'show']).as('home')
-
-    // Chapter
-    router
-      .get('/story/chapter/:chapterId', [IndexChapterController, 'handleAction'])
-      .as('chapter.index')
-
-    // Story
     router.get('/stories', [IndexStoryController, 'index']).as('stories.index')
-  })
-  .use(middleware.auth())
-
-// API routes
-router
-  .group(() => {
-    // categories
     router.get('/categories', [ApiCategoryController, 'all']).as('api.categories.all')
-
-    // user
     router.get('/me', [ApiUserController, 'me']).as('api.user.me')
-
-    // chapter
-    router
-      .post('/story/:id/chapter', [CreateChapterController, 'handleAction'])
-      .as('stories.storeChapter')
-    router
-      .delete('/story/chapter/:id', [DeleteChapterController, 'handleAction'])
-      .as('stories.deleteChapter')
-
-    //story
-    router.delete('/story/:id', [DeleteStoryController, 'handleAction']).as('stories.destroy')
-    router.put('/story/:id', [EditStoryController, 'handleAction']).as('stories.update')
     router.post('/story', [CreateStoryController, 'handleAction']).as('stories.store')
   })
-  .prefix('api/v1')
   .use(middleware.auth())
+
+/*
+|--------------------------------------------------------------------------
+ ROUTES STORY MIDDLEWARE PROTECTED (a user can only access his own stories, view, edit, delete, create chapters)
+|--------------------------------------------------------------------------
+ */
+router
+  .group(() => {
+    router.delete('/story/:storyId', [DeleteStoryController, 'handleAction']).as('stories.destroy')
+    router.put('/story/:storyId', [EditStoryController, 'handleAction']).as('stories.update')
+    router
+      .get('/story/:storyId/chapter/:chapterId', [IndexChapterController, 'handleAction'])
+      .as('chapter.index')
+    router
+      .post('/story/:storyId/chapter', [CreateChapterController, 'handleAction'])
+      .as('stories.storeChapter')
+    router
+      .delete('/story/:storyId/chapter/:chapterId', [DeleteChapterController, 'handleAction'])
+      .as('stories.deleteChapter')
+  })
+  .middleware([middleware.auth(), middleware.user_story()])
