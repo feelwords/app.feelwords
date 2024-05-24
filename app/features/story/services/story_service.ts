@@ -1,7 +1,7 @@
 import Story from '#models/story'
 import Category from '#models/category'
 import { HttpContext } from '@adonisjs/core/http'
-import { UPLOAD_PATH } from './file_upload_service.js'
+import { UPLOAD_PATH } from '#services/file_upload_service'
 
 interface Payload {
   id?: number

@@ -24,6 +24,14 @@ export default class ChapterService {
     return chapter
   }
 
+  async reorderChapters(storyId: number) {
+    const chapters = await Chapter.query().where('story_id', storyId).orderBy('order', 'asc')
+    for (const [i, chapter] of chapters.entries()) {
+      chapter.order = i + 1
+      await chapter.save()
+    }
+  }
+
   async countChapter(storyId: number) {
     return Chapter.query().where('story_id', storyId).count('* as total')
   }

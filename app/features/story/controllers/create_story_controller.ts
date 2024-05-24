@@ -1,6 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { createStoryValidator } from '../validator/create_story.js'
-import FileUploadService from '../services/file_upload_service.js'
+import FileUploadService from '#services/file_upload_service'
 import { inject } from '@adonisjs/core'
 import StoryService from '../services/story_service.js'
 import ChapterService from '../../chapter/services/chapter_service.js'

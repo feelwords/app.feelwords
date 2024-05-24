@@ -174,7 +174,7 @@ function ChapterNew({ storyId }: { storyId: number }) {
         storyId,
       })
       .then((response) => {
-        window.location.href = `/story/chapter/${response.data.defaultChapterId}`
+        window.location.href = `/story/${storyId}/chapter/${response.data.defaultChapterId}`
       })
       .catch((error) =>
         toast('Une erreur est survenue lors de la création du chapitre', {

@@ -1,28 +1,24 @@
 import { HttpContext } from '@adonisjs/core/http'
 import Chapter from '#models/chapter'
+import ChapterService from '../services/chapter_service.js'
+import { inject } from '@adonisjs/core'
 
+// todo : refactor front to split files
+
+@inject()
 export default class DeleteChapterController {
-  async handleAction({ request, response, auth }: HttpContext) {
+  constructor(protected chapterService: ChapterService) {}
+
+  async handleAction({ request, response }: HttpContext) {
     const chapterId = request.param('chapterId')
-    const user = auth.getUserOrFail()
-    // todo : refactor front to split files
-    // Vérification de l'existence du chapitre
+
     const chapter = await Chapter.query().where('id', chapterId).firstOrFail()
 
-    // Chargement de l'histoire associée au chapitre
     const story = await chapter.related('story').query().firstOrFail()
 
-    // Chargement de l'utilisateur associé à l'histoire
-    await story.load('user')
-
-    // Vérification que l'utilisateur est bien le propriétaire de l'histoire
-    if (story.user.id !== user.id) {
-      console.log('Forbidden')
-      return response.status(403).json({ message: 'Forbidden' })
-    }
-
-    // Suppression du chapitre
     await chapter.delete()
+
+    await this.chapterService.reorderChapters(story.id)
 
     return response.status(200).json({ message: 'Chapter deleted' })
   }
