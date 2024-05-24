@@ -5,7 +5,10 @@ const allyConfig = defineConfig({
   google: services.google({
     clientId: env.get('GOOGLE_CLIENT_ID'),
     clientSecret: env.get('GOOGLE_CLIENT_SECRET'),
-    callbackUrl: 'http://localhost:3333/auth/google/callback',
+    callbackUrl:
+      env.get('NODE_ENV') === 'development'
+        ? 'http://localhost:3333/auth/google/callback'
+        : 'https://app.feelwords.fr/auth/google/callback',
   }),
 })
 
