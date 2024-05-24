@@ -20,7 +20,7 @@ ADD . .
 RUN node ace build
 
 # Production stage
-FROM base
+FROM base as production
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
