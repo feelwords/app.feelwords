@@ -3,14 +3,12 @@ import Chapter from '#models/chapter'
 
 export default class DeleteChapterController {
   async handleAction({ request, response, auth }: HttpContext) {
-    const chapterId = request.param('id')
+    const chapterId = request.param('chapterId')
     const user = auth.getUserOrFail()
+    // todo: edit form hander
 
-    // todo : move this to a middleware and use it here -> edit -> index -> delete -> update
-    // todo : refactor front to split files
-    // todo : split call api in action folder
-    // todo: edit form handler
     // todo : order chapter by order
+    // todo : refactor front to split files
     // Vérification de l'existence du chapitre
     const chapter = await Chapter.query().where('id', chapterId).firstOrFail()
 

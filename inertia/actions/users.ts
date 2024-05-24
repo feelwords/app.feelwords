@@ -1,10 +1,9 @@
 import axios from 'axios'
-import { API_URL } from '../../utils/axios'
 import { toast } from 'sonner'
 import { ERROR_STYLE } from '~/lib/sonnar'
 
 export const getCurrentUser = async () => {
-  return await axios.get(`${API_URL}/me`)
+  return await axios.get(`/me`)
 }
 
 export async function createUser(data: any) {

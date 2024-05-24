@@ -37,10 +37,7 @@ import {
 import Chapter from '#models/chapter'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import IndexChapterController from '../../../app/features/chapter/controllers/index_chapter_controller'
-import axios from 'axios'
-import { toast } from 'sonner'
-import { ERROR_STYLE } from '~/lib/sonnar'
-import { API_URL } from '../../../utils/axios'
+import { deleteChapter } from '~/actions/chapter'
 
 export default function IndexChapter({
   chapter,
@@ -164,23 +161,9 @@ function EditForm({ className, chapter }: { className?: string; chapter: Chapter
 }
 
 function DeleteForm({ chapter }: { chapter: Chapter }) {
-  const handleDelete = (e: any) => {
+  const handleDelete = (e: React.FormEvent) => {
     e.preventDefault()
-    axios
-      .delete(`${API_URL}/story/chapter/${chapter.id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(() => {
-        window.location.href = '/stories'
-      })
-      .catch((error) => {
-        toast('Une erreur est survenue lors de la suppression du chapitre', {
-          className: ERROR_STYLE,
-          description: error.response.data.message || 'Une erreur est survenue',
-        })
-      })
+    deleteChapter({ chapter })
   }
   return (
     <form onSubmit={(e) => handleDelete(e)} className={cn('grid items-start gap-4 mx-4')}>

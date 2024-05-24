@@ -11,7 +11,6 @@ import { MultiSelect } from '~/components/story/multi_select_categories'
 import Chapter from '#models/chapter'
 import { Eye, Heart, MessageSquareText, Plus } from 'lucide-react'
 import axios from 'axios'
-import { API_URL } from '../../../utils/axios'
 import { toast } from 'sonner'
 import { ERROR_STYLE } from '~/lib/sonnar'
 
@@ -127,7 +126,7 @@ export function StoryForm({
       {story && (
         <div className="grid gap-2">
           <Label htmlFor="chapters">Chapitres ({story.chapters.length})</Label>
-          <ChapterList chapters={story.chapters} />
+          <ChapterList storyId={story.id} chapters={story.chapters} />
           <ChapterNew storyId={story.id} />
         </div>
       )}
@@ -136,12 +135,12 @@ export function StoryForm({
   )
 }
 
-function ChapterList({ chapters }: { chapters: Chapter[] }) {
+function ChapterList({ chapters, storyId }: { chapters: Chapter[]; storyId: number }) {
   return (
     <div className="grid gap-2">
       {chapters.map((chapter: Chapter) => (
         <a
-          href={`/story/chapter/${chapter.id}`}
+          href={`/story/${storyId}/chapter/${chapter.id}`}
           key={chapter.id}
           className="flex gap-2 justify-between border p-4"
         >
@@ -169,7 +168,7 @@ function ChapterList({ chapters }: { chapters: Chapter[] }) {
 function ChapterNew({ storyId }: { storyId: number }) {
   function handleClick() {
     axios
-      .post(`${API_URL}/story/${storyId}/chapter`, {
+      .post(`/story/${storyId}/chapter`, {
         storyId,
       })
       .then((response) => {

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { API_URL } from '../../utils/axios'
 import { toast } from 'sonner'
 
 interface StoryData {
@@ -39,7 +38,7 @@ export const createStory = (
 ) => {
   const formData = createFormData(data)
   axios
-    .post(`${API_URL}/story`, formData, {
+    .post(`/story`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -72,7 +71,7 @@ export const editStory = (
 ) => {
   const formData = createFormData(data)
   axios
-    .put(`${API_URL}/story/${data.id}`, formData, {
+    .put(`/story/${data.id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
