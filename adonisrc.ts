@@ -94,10 +94,6 @@ export default defineConfig({
       pattern: 'public/**',
       reloadServer: false,
     },
-    {
-      pattern: 'assets/**',
-      reloadServer: false,
-    },
   ],
 
   assetsBundler: false,
