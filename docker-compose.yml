@@ -14,4 +14,4 @@ services:
       - .env
     volumes:
       - ./:/home/node/app
-    command: dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
+    command: node ace serve --watch
