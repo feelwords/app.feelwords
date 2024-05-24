@@ -21,14 +21,13 @@ RUN node ace build
 
 # Production stage
 FROM base as production
-
 ENV NODE_ENV=production
 ENV DATABASE_URL=${DATABASE_URL}
 ENV PORT=${PORT}
-
 WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
+COPY --from=build /assets /app/public/assets
 RUN apk add curl
 EXPOSE ${PORT}
 CMD ["node", "./bin/server.js"]
