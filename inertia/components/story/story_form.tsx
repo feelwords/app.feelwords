@@ -172,6 +172,9 @@ function ChapterNew({ storyId }: { storyId: number }) {
       .post(`${API_URL}/story/${storyId}/chapter`, {
         storyId,
       })
+      .then((response) => {
+        window.location.href = `/story/${storyId}/chapter/${response.data.defaultChapterId}`
+      })
       .catch((error) =>
         toast('Une erreur est survenue lors de la création du chapitre', {
           description: error.response.data.message,

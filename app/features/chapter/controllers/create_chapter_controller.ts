@@ -20,6 +20,6 @@ export default class CreateChapterController {
       content: '',
     })
 
-    return response.redirect().toRoute('chapter.index', { storyId, chapterId: defaultChapter.id })
+    return response.status(201).json({ defaultChapterId: defaultChapter.id })
   }
 }

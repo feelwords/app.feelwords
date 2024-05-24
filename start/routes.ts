@@ -12,10 +12,6 @@ import { middleware } from '#start/kernel'
 
 const IndexChapterController = () =>
   import('../app/features/chapter/controllers/index_chapter_controller.js')
-const DeleteChapterController = () =>
-  import('../app/features/chapter/controllers/delete_chapter_controller.js')
-const EditChapterController = () =>
-  import('../app/features/chapter/controllers/edit_chapter_controller.js')
 
 const CreateChapterController = () =>
   import('../app/features/chapter/controllers/create_chapter_controller.js')
