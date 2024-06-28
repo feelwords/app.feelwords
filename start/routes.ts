@@ -97,4 +97,4 @@ router
       .put('/story/:storyId/chapter/:chapterId', [EditChapterController, 'handleAction'])
       .as('stories.updateChapter')
   })
-  .middleware([middleware.auth() /*, middleware.user_story()*/])
+  .middleware(middleware.auth() /*, middleware.user_story()*/)
