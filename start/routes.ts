@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
+
 const EditChapterController = () =>
   import('../app/features/chapter/controllers/edit_chapter_controller.js')
 
@@ -97,4 +98,4 @@ router
       .put('/story/:storyId/chapter/:chapterId', [EditChapterController, 'handleAction'])
       .as('stories.updateChapter')
   })
-  .middleware([middleware.auth(), middleware.user_story()])
+  .middleware([middleware.auth() /*, middleware.user_story()*/])

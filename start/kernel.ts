@@ -39,7 +39,7 @@ router.use([
   () => import('@adonisjs/session/session_middleware'),
   () => import('@adonisjs/shield/shield_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
-  () => import('#middleware/user_story_middleware'),
+  //() => import('#middleware/user_story_middleware'),
 ])
 
 /**
@@ -49,5 +49,5 @@ router.use([
 export const middleware = router.named({
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware'),
-  user_story: () => import('#middleware/user_story_middleware'),
+  //user_story: () => import('#middleware/user_story_middleware'),
 })
